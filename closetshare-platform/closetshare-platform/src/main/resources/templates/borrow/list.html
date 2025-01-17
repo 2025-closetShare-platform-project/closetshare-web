@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{borrow.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{borrow.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/borrows/add}" class="btn btn-primary ms-2">[[#{borrow.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${borrows.empty}">[[#{borrow.list.empty}]]</div>
+            <div th:if="${!borrows.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{borrow.seqId.label}]]</th>
+                            <th scope="col">[[#{borrow.rentalFee.label}]]</th>
+                            <th scope="col">[[#{borrow.rentalDate.label}]]</th>
+                            <th scope="col">[[#{borrow.returnDate.label}]]</th>
+                            <th scope="col">[[#{borrow.borrowStatus.label}]]</th>
+                            <th scope="col">[[#{borrow.userId.label}]]</th>
+                            <th scope="col">[[#{borrow.itemId.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="borrow : ${borrows}">
+                            <td>[[${borrow.seqId}]]</td>
+                            <td>[[${borrow.rentalFee}]]</td>
+                            <td>[[${borrow.rentalDate}]]</td>
+                            <td>[[${borrow.returnDate}]]</td>
+                            <td>[[${borrow.borrowStatus}]]</td>
+                            <td>[[${borrow.userId}]]</td>
+                            <td>[[${borrow.itemId}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/borrows/edit/{seqId}(seqId=${borrow.seqId})}" class="btn btn-sm btn-secondary">[[#{borrow.list.edit}]]</a>
+                                    <form th:action="@{/borrows/delete/{seqId}(seqId=${borrow.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{borrow.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

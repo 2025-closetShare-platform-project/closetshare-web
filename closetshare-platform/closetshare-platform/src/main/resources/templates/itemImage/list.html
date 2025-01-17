@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{itemImage.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{itemImage.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/itemImages/add}" class="btn btn-primary ms-2">[[#{itemImage.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${itemImages.empty}">[[#{itemImage.list.empty}]]</div>
+            <div th:if="${!itemImages.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{itemImage.seqId.label}]]</th>
+                            <th scope="col">[[#{itemImage.src.label}]]</th>
+                            <th scope="col">[[#{itemImage.uuid.label}]]</th>
+                            <th scope="col">[[#{itemImage.filename.label}]]</th>
+                            <th scope="col">[[#{itemImage.itemId.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="itemImage : ${itemImages}">
+                            <td>[[${itemImage.seqId}]]</td>
+                            <td>[[${itemImage.src}]]</td>
+                            <td>[[${itemImage.uuid}]]</td>
+                            <td>[[${itemImage.filename}]]</td>
+                            <td>[[${itemImage.itemId}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/itemImages/edit/{seqId}(seqId=${itemImage.seqId})}" class="btn btn-sm btn-secondary">[[#{itemImage.list.edit}]]</a>
+                                    <form th:action="@{/itemImages/delete/{seqId}(seqId=${itemImage.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{itemImage.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

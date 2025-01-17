@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{interestedProducts.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{interestedProducts.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/interestedProductss/add}" class="btn btn-primary ms-2">[[#{interestedProducts.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${interestedProductses.empty}">[[#{interestedProducts.list.empty}]]</div>
+            <div th:if="${!interestedProductses.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{interestedProducts.seqId.label}]]</th>
+                            <th scope="col">[[#{interestedProducts.userId.label}]]</th>
+                            <th scope="col">[[#{interestedProducts.itemId.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="interestedProducts : ${interestedProductses}">
+                            <td>[[${interestedProducts.seqId}]]</td>
+                            <td>[[${interestedProducts.userId}]]</td>
+                            <td>[[${interestedProducts.itemId}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/interestedProductss/edit/{seqId}(seqId=${interestedProducts.seqId})}" class="btn btn-sm btn-secondary">[[#{interestedProducts.list.edit}]]</a>
+                                    <form th:action="@{/interestedProductss/delete/{seqId}(seqId=${interestedProducts.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{interestedProducts.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

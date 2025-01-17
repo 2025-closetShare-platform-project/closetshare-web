@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{borrow.add.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{borrow.add.headline}]]</h1>
+                <div>
+                    <a th:href="@{/borrows}" class="btn btn-secondary">[[#{borrow.add.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('borrow')}" />
+            <form th:action="${requestUri}" method="post" novalidate="">
+                <div th:replace="~{fragments/forms::inputRow(object='borrow', field='rentalFee', required=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='borrow', field='rentalDate', required=true, inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='borrow', field='returnDate', required=true, inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='borrow', field='borrowStatus', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='borrow', field='userId', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='borrow', field='itemId', required=true, type='select')}" />
+                <input type="submit" th:value="#{borrow.add.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>
