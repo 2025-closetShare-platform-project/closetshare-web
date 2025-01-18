@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{OwlCarousel2}" />
+    <file url="file://$PROJECT_DIR$/closetshare-platform/closetshare-platform" libraries="{OwlCarousel2}" />
+    <file url="file://$PROJECT_DIR$/closetshare-platform/closetshare-platform/src/main" libraries="{OwlCarousel2}" />
+  </component>
+</project>
