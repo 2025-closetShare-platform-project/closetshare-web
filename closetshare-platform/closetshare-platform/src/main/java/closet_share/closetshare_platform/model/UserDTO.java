@@ -2,8 +2,11 @@ package closet_share.closetshare_platform.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 public class UserDTO {
 
     private Long seqId;
@@ -25,7 +28,8 @@ public class UserDTO {
 
     @NotNull
     @UserUserPhoneNumberUnique
-    private Integer userPhoneNumber;
+    @Size(max = 11)
+    private String userPhoneNumber;
 
     @NotNull
     @Size(max = 255)
@@ -78,11 +82,11 @@ public class UserDTO {
         this.userName = userName;
     }
 
-    public Integer getUserPhoneNumber() {
+    public String getUserPhoneNumber() {
         return userPhoneNumber;
     }
 
-    public void setUserPhoneNumber(final Integer userPhoneNumber) {
+    public void setUserPhoneNumber(final String userPhoneNumber) {
         this.userPhoneNumber = userPhoneNumber;
     }
 

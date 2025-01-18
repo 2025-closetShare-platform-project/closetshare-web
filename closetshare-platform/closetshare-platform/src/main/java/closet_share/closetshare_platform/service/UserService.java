@@ -92,7 +92,7 @@ public class UserService {
         return userRepository.existsByUserIdIgnoreCase(userId);
     }
 
-    public boolean userPhoneNumberExists(final Integer userPhoneNumber) {
+    public boolean userPhoneNumberExists(final String userPhoneNumber) {
         return userRepository.existsByUserPhoneNumber(userPhoneNumber);
     }
 

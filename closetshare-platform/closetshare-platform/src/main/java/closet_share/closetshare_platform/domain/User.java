@@ -2,6 +2,7 @@ package closet_share.closetshare_platform.domain;
 
 import closet_share.closetshare_platform.model.Gender;
 import closet_share.closetshare_platform.model.Role;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -12,11 +13,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "Users")
 @EntityListeners(AuditingEntityListener.class)
@@ -40,8 +45,8 @@ public class User {
     @Column(nullable = false, length = 10)
     private String userName;
 
-    @Column(nullable = false, unique = true)
-    private Integer userPhoneNumber;
+    @Column(nullable = false, unique = true, length = 11)
+    private String userPhoneNumber;
 
     @Column(nullable = false)
     private String address;
@@ -101,11 +106,11 @@ public class User {
         this.userName = userName;
     }
 
-    public Integer getUserPhoneNumber() {
+    public String getUserPhoneNumber() {
         return userPhoneNumber;
     }
 
-    public void setUserPhoneNumber(final Integer userPhoneNumber) {
+    public void setUserPhoneNumber(final String userPhoneNumber) {
         this.userPhoneNumber = userPhoneNumber;
     }
 
