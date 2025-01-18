@@ -51,29 +51,29 @@ public class BorrowController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("borrows", borrowService.findAll());
-        return "borrow/list";
+        return "admin/borrow/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("borrow") final BorrowDTO borrowDTO) {
-        return "borrow/add";
+        return "admin/borrow/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("borrow") @Valid final BorrowDTO borrowDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "borrow/add";
+            return "admin/borrow/add";
         }
         borrowService.create(borrowDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("borrow.create.success"));
-        return "redirect:/borrows";
+        return "redirect:/admin/borrows";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("borrow", borrowService.get(seqId));
-        return "borrow/edit";
+        return "admin/borrow/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -81,11 +81,11 @@ public class BorrowController {
             @ModelAttribute("borrow") @Valid final BorrowDTO borrowDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "borrow/edit";
+            return "admin/borrow/edit";
         }
         borrowService.update(seqId, borrowDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("borrow.update.success"));
-        return "redirect:/borrows";
+        return "redirect:/admin/borrows";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -93,7 +93,7 @@ public class BorrowController {
             final RedirectAttributes redirectAttributes) {
         borrowService.delete(seqId);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("borrow.delete.success"));
-        return "redirect:/borrows";
+        return "redirect:/admin/borrows";
     }
 
 }

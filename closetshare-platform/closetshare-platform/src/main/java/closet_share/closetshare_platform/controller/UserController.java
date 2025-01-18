@@ -37,29 +37,29 @@ public class UserController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("users", userService.findAll());
-        return "user/list";
+        return "admin/user/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("user") final UserDTO userDTO) {
-        return "user/add";
+        return "admin/user/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("user") @Valid final UserDTO userDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "user/add";
+            return "admin/user/add";
         }
         userService.create(userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.create.success"));
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("user", userService.get(seqId));
-        return "user/edit";
+        return "admin/user/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -67,11 +67,11 @@ public class UserController {
             @ModelAttribute("user") @Valid final UserDTO userDTO, final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "user/edit";
+            return "admin/user/edit";
         }
         userService.update(seqId, userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -85,7 +85,11 @@ public class UserController {
             userService.delete(seqId);
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("user.delete.success"));
         }
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
+    @GetMapping("/login")
+    public String login(){
+        return "member/login/login_form";
+    }
 }

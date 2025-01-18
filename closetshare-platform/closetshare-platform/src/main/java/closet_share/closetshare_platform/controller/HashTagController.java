@@ -29,29 +29,29 @@ public class HashTagController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("hashTags", hashTagService.findAll());
-        return "hashTag/list";
+        return "admin/hashTag/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("hashTag") final HashTagDTO hashTagDTO) {
-        return "hashTag/add";
+        return "admin/hashTag/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("hashTag") @Valid final HashTagDTO hashTagDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "hashTag/add";
+            return "admin/hashTag/add";
         }
         hashTagService.create(hashTagDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTag.create.success"));
-        return "redirect:/hashTags";
+        return "redirect:/admin/hashTags";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("hashTag", hashTagService.get(seqId));
-        return "hashTag/edit";
+        return "admin/hashTag/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -59,11 +59,11 @@ public class HashTagController {
             @ModelAttribute("hashTag") @Valid final HashTagDTO hashTagDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "hashTag/edit";
+            return "admin/hashTag/edit";
         }
         hashTagService.update(seqId, hashTagDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTag.update.success"));
-        return "redirect:/hashTags";
+        return "redirect:/admin/hashTags";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -77,7 +77,7 @@ public class HashTagController {
             hashTagService.delete(seqId);
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("hashTag.delete.success"));
         }
-        return "redirect:/hashTags";
+        return "redirect:/admin/hashTags";
     }
 
 }
