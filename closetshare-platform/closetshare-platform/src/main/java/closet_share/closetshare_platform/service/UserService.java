@@ -4,6 +4,8 @@ import closet_share.closetshare_platform.domain.Borrow;
 import closet_share.closetshare_platform.domain.InterestedProducts;
 import closet_share.closetshare_platform.domain.Item;
 import closet_share.closetshare_platform.domain.User;
+import closet_share.closetshare_platform.model.Gender;
+import closet_share.closetshare_platform.model.Role;
 import closet_share.closetshare_platform.model.UserDTO;
 import closet_share.closetshare_platform.repos.BorrowRepository;
 import closet_share.closetshare_platform.repos.InterestedProductsRepository;
@@ -11,11 +13,14 @@ import closet_share.closetshare_platform.repos.ItemRepository;
 import closet_share.closetshare_platform.repos.UserRepository;
 import closet_share.closetshare_platform.util.NotFoundException;
 import closet_share.closetshare_platform.util.ReferencedWarning;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
@@ -23,15 +28,6 @@ public class UserService {
     private final ItemRepository itemRepository;
     private final BorrowRepository borrowRepository;
     private final InterestedProductsRepository interestedProductsRepository;
-
-    public UserService(final UserRepository userRepository, final ItemRepository itemRepository,
-            final BorrowRepository borrowRepository,
-            final InterestedProductsRepository interestedProductsRepository) {
-        this.userRepository = userRepository;
-        this.itemRepository = itemRepository;
-        this.borrowRepository = borrowRepository;
-        this.interestedProductsRepository = interestedProductsRepository;
-    }
 
     public List<UserDTO> findAll() {
         final List<User> users = userRepository.findAll(Sort.by("seqId"));
@@ -44,6 +40,13 @@ public class UserService {
         return userRepository.findById(seqId)
                 .map(user -> mapToDTO(user, new UserDTO()))
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public UserDTO create(String userPhoneNumber, String userPassword, String userName,
+                          String userId, String address, String subAddress, Role role, Gender gender) {
+        UserDTO userDTO = new UserDTO();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     }
 
     public Long create(final UserDTO userDTO) {

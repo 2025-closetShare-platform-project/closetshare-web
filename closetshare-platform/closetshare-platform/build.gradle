@@ -31,8 +31,9 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web-services')
     developmentOnly('org.springframework.boot:spring-boot-devtools')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    //lombok
-    implementation ('org.projectlombok:lombok')
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.thymeleaf.extras:thymeleaf-extras-springsecurity6')
+    implementation('org.projectlombok:lombok')
 }
 
 tasks.withType(Test) {
