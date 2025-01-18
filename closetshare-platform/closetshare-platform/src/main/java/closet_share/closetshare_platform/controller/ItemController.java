@@ -46,29 +46,29 @@ public class ItemController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("items", itemService.findAll());
-        return "item/list";
+        return "admin/item/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("item") final ItemDTO itemDTO) {
-        return "item/add";
+        return "admin/item/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("item") @Valid final ItemDTO itemDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "item/add";
+            return "admin/item/add";
         }
         itemService.create(itemDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.create.success"));
-        return "redirect:/items";
+        return "redirect:/admin/items";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("item", itemService.get(seqId));
-        return "item/edit";
+        return "admin/item/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -76,11 +76,11 @@ public class ItemController {
             @ModelAttribute("item") @Valid final ItemDTO itemDTO, final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "item/edit";
+            return "admin/item/edit";
         }
         itemService.update(seqId, itemDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.update.success"));
-        return "redirect:/items";
+        return "redirect:/admin/items";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -94,7 +94,7 @@ public class ItemController {
             itemService.delete(seqId);
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("item.delete.success"));
         }
-        return "redirect:/items";
+        return "redirect:/admin/items";
     }
 
 }

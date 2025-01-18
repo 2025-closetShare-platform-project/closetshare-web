@@ -42,29 +42,29 @@ public class ItemImageController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("itemImages", itemImageService.findAll());
-        return "itemImage/list";
+        return "admin/itemImage/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("itemImage") final ItemImageDTO itemImageDTO) {
-        return "itemImage/add";
+        return "admin/itemImage/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("itemImage") @Valid final ItemImageDTO itemImageDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "itemImage/add";
+            return "admin/itemImage/add";
         }
         itemImageService.create(itemImageDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("itemImage.create.success"));
-        return "redirect:/itemImages";
+        return "redirect:/admin/itemImages";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("itemImage", itemImageService.get(seqId));
-        return "itemImage/edit";
+        return "admin/itemImage/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -72,11 +72,11 @@ public class ItemImageController {
             @ModelAttribute("itemImage") @Valid final ItemImageDTO itemImageDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "itemImage/edit";
+            return "admin/itemImage/edit";
         }
         itemImageService.update(seqId, itemImageDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("itemImage.update.success"));
-        return "redirect:/itemImages";
+        return "redirect:/admin/itemImages";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -84,7 +84,7 @@ public class ItemImageController {
             final RedirectAttributes redirectAttributes) {
         itemImageService.delete(seqId);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("itemImage.delete.success"));
-        return "redirect:/itemImages";
+        return "redirect:/admin/itemImages";
     }
 
 }

@@ -49,13 +49,13 @@ public class InterestedProductsController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("interestedProductses", interestedProductsService.findAll());
-        return "interestedProducts/list";
+        return "admin/interestedProducts/list";
     }
 
     @GetMapping("/add")
     public String add(
             @ModelAttribute("interestedProducts") final InterestedProductsDTO interestedProductsDTO) {
-        return "interestedProducts/add";
+        return "admin/interestedProducts/add";
     }
 
     @PostMapping("/add")
@@ -63,17 +63,17 @@ public class InterestedProductsController {
             @ModelAttribute("interestedProducts") @Valid final InterestedProductsDTO interestedProductsDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "interestedProducts/add";
+            return "admin/interestedProducts/add";
         }
         interestedProductsService.create(interestedProductsDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("interestedProducts.create.success"));
-        return "redirect:/interestedProductss";
+        return "redirect:/admin/interestedProductss";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("interestedProducts", interestedProductsService.get(seqId));
-        return "interestedProducts/edit";
+        return "admin/interestedProducts/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -81,11 +81,11 @@ public class InterestedProductsController {
             @ModelAttribute("interestedProducts") @Valid final InterestedProductsDTO interestedProductsDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "interestedProducts/edit";
+            return "admin/interestedProducts/edit";
         }
         interestedProductsService.update(seqId, interestedProductsDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("interestedProducts.update.success"));
-        return "redirect:/interestedProductss";
+        return "redirect:/admin/interestedProductss";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -93,7 +93,7 @@ public class InterestedProductsController {
             final RedirectAttributes redirectAttributes) {
         interestedProductsService.delete(seqId);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("interestedProducts.delete.success"));
-        return "redirect:/interestedProductss";
+        return "redirect:/admin/interestedProductss";
     }
 
 }

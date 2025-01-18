@@ -49,29 +49,29 @@ public class HashTagItemController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("hashTagItems", hashTagItemService.findAll());
-        return "hashTagItem/list";
+        return "admin/hashTagItem/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("hashTagItem") final HashTagItemDTO hashTagItemDTO) {
-        return "hashTagItem/add";
+        return "admin/hashTagItem/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("hashTagItem") @Valid final HashTagItemDTO hashTagItemDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "hashTagItem/add";
+            return "admin/hashTagItem/add";
         }
         hashTagItemService.create(hashTagItemDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTagItem.create.success"));
-        return "redirect:/hashTagItems";
+        return "redirect:/admin/hashTagItems";
     }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
         model.addAttribute("hashTagItem", hashTagItemService.get(seqId));
-        return "hashTagItem/edit";
+        return "admin/hashTagItem/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -79,11 +79,11 @@ public class HashTagItemController {
             @ModelAttribute("hashTagItem") @Valid final HashTagItemDTO hashTagItemDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "hashTagItem/edit";
+            return "admin/hashTagItem/edit";
         }
         hashTagItemService.update(seqId, hashTagItemDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTagItem.update.success"));
-        return "redirect:/hashTagItems";
+        return "redirect:/admin/hashTagItems";
     }
 
     @PostMapping("/delete/{seqId}")
@@ -91,7 +91,7 @@ public class HashTagItemController {
             final RedirectAttributes redirectAttributes) {
         hashTagItemService.delete(seqId);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("hashTagItem.delete.success"));
-        return "redirect:/hashTagItems";
+        return "redirect:/admin/hashTagItems";
     }
 
 }
