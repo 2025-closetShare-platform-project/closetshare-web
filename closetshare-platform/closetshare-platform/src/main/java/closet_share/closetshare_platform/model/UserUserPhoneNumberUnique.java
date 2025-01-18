@@ -35,7 +35,7 @@ public @interface UserUserPhoneNumberUnique {
 
     Class<? extends Payload>[] payload() default {};
 
-    class UserUserPhoneNumberUniqueValidator implements ConstraintValidator<UserUserPhoneNumberUnique, Integer> {
+    class UserUserPhoneNumberUniqueValidator implements ConstraintValidator<UserUserPhoneNumberUnique, String> {
 
         private final UserService userService;
         private final HttpServletRequest request;
@@ -47,7 +47,7 @@ public @interface UserUserPhoneNumberUnique {
         }
 
         @Override
-        public boolean isValid(final Integer value, final ConstraintValidatorContext cvContext) {
+        public boolean isValid(final String value, final ConstraintValidatorContext cvContext) {
             if (value == null) {
                 // no value present
                 return true;

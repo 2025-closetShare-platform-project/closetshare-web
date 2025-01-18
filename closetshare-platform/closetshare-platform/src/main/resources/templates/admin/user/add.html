@@ -12,16 +12,16 @@
                     <a th:href="@{/users}" class="btn btn-secondary">[[#{user.add.back}]]</a>
                 </div>
             </div>
-            <div th:replace="~{fragments/forms::globalErrors('user')}" />
+            <div th:replace="~{admin/fragments/forms::globalErrors('user')}" />
             <form th:action="${requestUri}" method="post" novalidate="">
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='userId', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='userPassword')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='role', required=true, type='radio')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='userName', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='userPhoneNumber', required=true, type='number')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='address', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='subAddress', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='user', field='gender', required=true, type='radio')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='userId', required=true)}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='userPassword')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='role', required=true, type='radio')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='userName', required=true)}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='userPhoneNumber', required=true, type='number')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='address', required=true)}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='subAddress', required=true)}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='user', field='gender', required=true, type='radio')}" />
                 <input type="submit" th:value="#{user.add.headline}" class="btn btn-primary mt-4" />
             </form>
         </div>

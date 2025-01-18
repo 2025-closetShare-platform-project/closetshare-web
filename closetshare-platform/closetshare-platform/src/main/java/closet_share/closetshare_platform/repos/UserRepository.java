@@ -8,6 +8,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserIdIgnoreCase(String userId);
 
-    boolean existsByUserPhoneNumber(Integer userPhoneNumber);
+    boolean existsByUserPhoneNumber(String userPhoneNumber);
 
 }
