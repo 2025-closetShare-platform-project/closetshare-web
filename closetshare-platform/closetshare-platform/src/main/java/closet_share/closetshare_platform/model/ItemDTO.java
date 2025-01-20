@@ -2,8 +2,13 @@ package closet_share.closetshare_platform.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 
+@Getter
+@Setter
 public class ItemDTO {
 
     private Long seqId;
@@ -29,6 +34,16 @@ public class ItemDTO {
 
     @NotNull
     private Long userId;
+
+    private MultipartFile[] file;
+
+    public MultipartFile[] getFile() {
+        return file;
+    }
+
+    public MultipartFile[] setFile() {
+        return file;
+    }
 
     public Long getSeqId() {
         return seqId;

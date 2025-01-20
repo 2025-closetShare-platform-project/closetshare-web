@@ -12,17 +12,30 @@
                     <a th:href="@{/items}" class="btn btn-secondary">[[#{item.add.back}]]</a>
                 </div>
             </div>
-            <div th:replace="~{fragments/forms::globalErrors('item')}" />
-            <form th:action="${requestUri}" method="post" novalidate="">
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='category', required=true, type='radio')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='gender', required=true, type='radio')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='title', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='viewCount', required=true, type='number')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='item', field='userId', required=true, type='select')}" />
+            <div th:replace="~{admin/fragments/forms::globalErrors('item')}" />
+            <form th:action="@{/items/add}" th:object="${item}" method="post" enctype="multipart/form-data">
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='category', required=true, type='radio')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='gender', required=true, type='radio')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='title', required=true)}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='viewCount', required=true, type='number')}" />
+                <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='userId', required=true, type='select')}" />
+
+                <!-- File Upload -->
+                <div class="row mb-3">
+                    <label for="fileInput" class="col-md-2 col-form-label">
+                        File Upload<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-md-10">
+                        <input id="fileInput" th:field="*{file}" type="file" class="form-control" multiple required />
+                    </div>
+                </div>
+
                 <input type="submit" th:value="#{item.add.headline}" class="btn btn-primary mt-4" />
             </form>
+
+
         </div>
     </body>
 </html>

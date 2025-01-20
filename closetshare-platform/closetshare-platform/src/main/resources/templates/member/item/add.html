@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>[[#{item.add.headline}]]</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex flex-wrap mb-4">
+        <h1 class="flex-grow-1">[[#{item.add.headline}]]</h1>
+        <div>
+            <a th:href="@{/items}" class="btn btn-secondary">[[#{item.add.back}]]</a>
+        </div>
+    </div>
+    <div th:replace="~{admin/fragments/forms::globalErrors('item')}" />
+    <form th:action="${requestUri}" method="post"  enctype="multipart/form-data" >
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='category', required=true, type='radio')}" />
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='gender', required=true, type='radio')}" />
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='title', required=true)}" />
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='viewCount', required=true, type='number')}" />
+        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='userId', required=true, type='select')}" />
+        <label for="fileInput" class="col-md-2 col-form-label">
+            File Upload<span class="text-danger">*</span>
+        </label>
+        <div class="col-md-10">
+            <input id="fileInput" name="file" type="file" class="form-control" required multiple />
+        </div>
+        <input type="submit" th:value="#{item.add.headline}" class="btn btn-primary mt-4" />
+    </form>
+</div>
+</body>
+</html>

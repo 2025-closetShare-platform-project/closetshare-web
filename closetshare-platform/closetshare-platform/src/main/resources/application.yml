@@ -24,6 +24,9 @@ spring:
       date: yyyy-MM-dd
       date-time: yyyy-MM-dd'T'HH:mm:ss
       time: HH:mm:ss
+  upload:
+    folder: /Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload
+
 error:
   handling:
     http-status-in-json-response: true

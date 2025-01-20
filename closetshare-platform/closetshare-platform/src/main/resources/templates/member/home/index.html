@@ -2,214 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <!-- 공통 레이아웃 -->
-<head th:replace="/member/fragments/head :: head"><title>hi</title></head>
-
+<head th:replace="~{/member/fragments/head :: head}"><title>Detail</title></head>
 <body>
 <div class="hero_area">
   <!-- header section -->
-  <header th:replace="/member/fragments/header :: header"></header>
+  <header th:replace="~{/member/fragments/header :: header}"></header>
+  <!-- end header section -->
 
-  <!-- slider section -->
-  <section class="slider_section position-relative">
-    <div id="customCarousel1" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-        <li data-target="#customCarousel1" data-slide-to="1"></li>
-        <li data-target="#customCarousel1" data-slide-to="2"></li>
-        <li data-target="#customCarousel1" data-slide-to="3"></li>
-      </ol>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="box">
-            <div class="baby_detail">
-              <div class="baby_text">
-                <h2>
-                  baby <br />
-                  Care center
-                </h2>
-              </div>
-              <a href="">
-                Read More
-              </a>
+
+  <!-- service section -->
+  <section class="service_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4" th:each="item : ${items}">
+          <div class="box shadow-sm p-3 mb-5 bg-white rounded">
+            <div class="img-box text-center">
+              <img src="images/service1.png" alt="" class="img-fluid" />
             </div>
-            <div class="care_detail">
-              <a href="">
-                Contact Us
+            <div class="detail-box mt-3 text-center">
+              <a th:href="@{/items/detail/{seqId}(seqId=${item.seqId})}">
+                <h4 class="text-uppercase font-weight-bold">
+                  [[${item.title}]]
+                </h4>
+                <p>
+                  [[${item.content}]]
+                </p>
               </a>
-              <div class="care_text">
-                <h2>
-                  We will take <br />
-                  Care of <br />
-                  your Baby
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="box">
-            <div class="baby_detail">
-              <div class="baby_text">
-                <h2>
-                  baby <br />
-                  Care center
-                </h2>
-              </div>
-              <a href="">
-                Read More
-              </a>
-            </div>
-            <div class="care_detail">
-              <a href="">
-                Contact Us
-              </a>
-              <div class="care_text">
-                <h2>
-                  We will take <br />
-                  Care of <br />
-                  your Baby
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="box">
-            <div class="baby_detail">
-              <div class="baby_text">
-                <h2>
-                  baby <br />
-                  Care center
-                </h2>
-              </div>
-              <a href="">
-                Read More
-              </a>
-            </div>
-            <div class="care_detail">
-              <a href="">
-                Contact Us
-              </a>
-              <div class="care_text">
-                <h2>
-                  We will take <br />
-                  Care of <br />
-                  your Baby
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="box">
-            <div class="baby_detail">
-              <div class="baby_text">
-                <h2>
-                  baby <br />
-                  Care center
-                </h2>
-              </div>
-              <a href="">
-                Read More
-              </a>
-            </div>
-            <div class="care_detail">
-              <a href="">
-                Contact Us
-              </a>
-              <div class="care_text">
-                <h2>
-                  We will take <br />
-                  Care of <br />
-                  your Baby
-                </h2>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- end slider section -->
-</div>
+  <!-- end service section -->
 
-<!-- service section -->
-<section class="service_section ">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-6">
-        <div class="box">
-          <div class="img-box">
-            <img src="images/service1.png" alt="" />
-          </div>
-          <div class="detail-box">
-            <h4>
-              Baby Milk
-            </h4>
-            <p>
-              available, but the majority have suffered alteration in some form, by injected
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="box ">
-          <div class="img-box">
-            <img src="images/service2.png" alt="" />
-          </div>
-          <div class="detail-box">
-            <h4>
-              Baby Clothes
-            </h4>
-            <p>
-              available, but the majority have suffered alteration in some form, by injected
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="box">
-          <div class="img-box">
-            <img src="images/service3.png" alt="" />
-          </div>
-          <div class="detail-box">
-            <h4>
-              Baby
-            </h4>
-            <p>
-              available, but the majority have suffered alteration in some form, by injected
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="box">
-          <div class="img-box">
-            <img src="images/service4.png" alt="" />
-          </div>
-          <div class="detail-box">
-            <h4>
-              Baby Walk
-            </h4>
-            <p>
-              available, but the majority have suffered alteration in some form, by injected
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- end service section -->
+  <!-- footer section -->
+  <footer th:replace="~{/member/fragments/footer :: footer}"></footer>
+  <!-- end footer section -->
 
-<!-- footer section -->
-<footer th:replace="/member/fragments/footer :: footer"></footer>
-<!-- end footer section -->
-
-<script src="js/jquery-3.4.1.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<script src="js/custom.js"></script>
-
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="js/custom.js"></script>
 </body>
 </html>
