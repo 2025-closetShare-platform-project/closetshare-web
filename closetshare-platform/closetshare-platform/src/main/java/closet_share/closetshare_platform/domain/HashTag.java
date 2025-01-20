@@ -28,7 +28,8 @@ public class HashTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seqId;
 
-    @Column(nullable = false, length = 20)
+
+    @Column(nullable = false, unique = true, length = 20)
     private String tagName;
 
     @CreatedDate

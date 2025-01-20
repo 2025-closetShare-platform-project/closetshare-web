@@ -1,17 +1,17 @@
 package closet_share.closetshare_platform.controller;
 
 import closet_share.closetshare_platform.domain.User;
-import closet_share.closetshare_platform.model.Category;
-import closet_share.closetshare_platform.model.Gender;
-import closet_share.closetshare_platform.model.ItemDTO;
-import closet_share.closetshare_platform.model.ItemImageDTO;
+import closet_share.closetshare_platform.model.*;
 import closet_share.closetshare_platform.repos.UserRepository;
+import closet_share.closetshare_platform.service.HashTagItemService;
+import closet_share.closetshare_platform.service.HashTagService;
 import closet_share.closetshare_platform.service.ItemImageService;
 import closet_share.closetshare_platform.service.ItemService;
 import closet_share.closetshare_platform.util.CustomCollectors;
 import closet_share.closetshare_platform.util.ReferencedWarning;
 import closet_share.closetshare_platform.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.boot.jackson.JsonMixinModuleEntries;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +34,23 @@ public class ItemController {
     private final ItemImageService itemImageService;
     private final ItemService itemService;
     private final UserRepository userRepository;
+    private final HashTagService hashTagService;
+    private final HashTagItemService hashTagItemService;
 
     //파일 폴더 위치
     private String uploadFolder = "/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
 
 
     public ItemController(final ItemService itemService, final UserRepository userRepository,
-                          final  ItemImageService itemImageService) {
+                          final HashTagService hashTagService,
+                          final HashTagItemService hashTagItemService,
+                          final  ItemImageService itemImageService, JsonMixinModuleEntries jsonMixinModuleEntries) {
         this.itemService = itemService;
         this.userRepository = userRepository;
         this.itemImageService = itemImageService;
+        this.hashTagItemService = hashTagItemService;
+        this.hashTagService = hashTagService;
+        this.jsonMixinModuleEntries = jsonMixinModuleEntries;
     }
 
     @ModelAttribute
@@ -62,7 +69,11 @@ public class ItemController {
     }
 
     @GetMapping("/add")
-    public String add(@ModelAttribute("item") final ItemDTO itemDTO) {
+    public String add(@ModelAttribute("item") final ItemDTO itemDTO,
+                      @ModelAttribute("hastag") final HashTagDTO hashTagDTO,
+                      Model model) {
+        model.addAttribute("hasTags",hashTagService.findAll());
+
         return "admin/item/add";
     }
 
@@ -142,4 +153,5 @@ public class ItemController {
         return "redirect:/admin/items";
     }
 
+    private final JsonMixinModuleEntries jsonMixinModuleEntries;
 }
