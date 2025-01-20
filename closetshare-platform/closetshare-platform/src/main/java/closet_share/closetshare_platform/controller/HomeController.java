@@ -29,6 +29,4 @@ public class HomeController {
         model.addAttribute("items", itemService.findAll());
         return "member/home/index";
     }
-
-
 }
