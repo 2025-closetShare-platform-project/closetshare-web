@@ -38,7 +38,8 @@ public class ItemImage {
     @Column(nullable = false, columnDefinition = "char(36)")
     private UUID uuid;
 
-    @Column(nullable = false, length = 20)
+    //변수형 바꿈
+    @Column(nullable = false)
     private String filename;
 
     @ManyToOne(fetch = FetchType.LAZY)

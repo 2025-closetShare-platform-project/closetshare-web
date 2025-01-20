@@ -14,9 +14,10 @@
             </div>
             <div th:replace="~{fragments/forms::globalErrors('itemImage')}" />
             <form th:action="${requestUri}" method="post" novalidate="">
-                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='src', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='uuid', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='filename', required=true)}" />
+<!--                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='src', required=true)}" />-->
+<!--                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='uuid', required=true)}" />-->
+<!--                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='filename', required=true)}" />-->
+                <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='file', required=true, type='file')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='itemImage', field='itemId', required=true, type='select')}" />
                 <input type="submit" th:value="#{itemImage.add.headline}" class="btn btn-primary mt-4" />
             </form>
