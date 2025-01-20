@@ -2,11 +2,13 @@ package closet_share.closetshare_platform.controller;
 
 import closet_share.closetshare_platform.model.Gender;
 import closet_share.closetshare_platform.model.Role;
+import closet_share.closetshare_platform.model.UserCreateForm;
 import closet_share.closetshare_platform.model.UserDTO;
 import closet_share.closetshare_platform.service.UserService;
 import closet_share.closetshare_platform.util.ReferencedWarning;
 import closet_share.closetshare_platform.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 
 @Controller
 @RequestMapping("/users")
@@ -45,16 +46,6 @@ public class UserController {
         return "admin/user/add";
     }
 
-    @PostMapping("/add")
-    public String add(@ModelAttribute("user") @Valid final UserDTO userDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "admin/user/add";
-        }
-        userService.create(userDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.create.success"));
-        return "redirect:/admin/users";
-    }
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
@@ -64,8 +55,8 @@ public class UserController {
 
     @PostMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId,
-            @ModelAttribute("user") @Valid final UserDTO userDTO, final BindingResult bindingResult,
-            final RedirectAttributes redirectAttributes) {
+                       @ModelAttribute("user") @Valid final UserDTO userDTO, final BindingResult bindingResult,
+                       final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "admin/user/edit";
         }
@@ -76,7 +67,7 @@ public class UserController {
 
     @PostMapping("/delete/{seqId}")
     public String delete(@PathVariable(name = "seqId") final Long seqId,
-            final RedirectAttributes redirectAttributes) {
+                         final RedirectAttributes redirectAttributes) {
         final ReferencedWarning referencedWarning = userService.getReferencedWarning(seqId);
         if (referencedWarning != null) {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR,
@@ -89,7 +80,38 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "member/login/login_form";
+    }
+
+    @GetMapping("/signup")
+    public String signup(UserCreateForm userCreateForm) {
+        return "member/signup/signup_form";
+    }
+
+    @PostMapping("/signup")
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "member/signup/signup_form";
+        }
+
+        if(!userCreateForm.getUserPassword().equals(userCreateForm.getUserPassword2())){
+            bindingResult.rejectValue("userPassword2", "passwordIncorrect", "2개의 패스워드가 일치하지 않습니다.");
+            return "member/signup/signup_form";
+        }
+
+        try{
+            userService.create(userCreateForm.getUserName(), userCreateForm.getUserPhoneNumber(), userCreateForm.getUserId(), userCreateForm.getUserPassword(), Role.MEMBER, userCreateForm.getGender());
+        }catch (DataIntegrityViolationException e){
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+            return "member/signup/signup_form";
+        }catch (Exception e){
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "member/signup/signup_form";
+
+        }
+        return "redirect:/";
     }
 }

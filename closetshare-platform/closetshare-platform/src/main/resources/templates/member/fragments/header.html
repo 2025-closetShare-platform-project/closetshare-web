@@ -41,7 +41,7 @@
                     </button>
                 </div>
                 <div class="overlay-content">
-                    <a class="active" href="index.html"> Home <span class="sr-only">(current)</span></a>
+                    <a class="active" th:href="@{/}"> Home <span class="sr-only">(current)</span></a>
                     <a class="" href="about.html"> About</a>
                     <a class="" href="why.html"> Why Us </a>
                     <a class="" href="team.html"> Our Team</a>
@@ -54,11 +54,27 @@
               PrimeCare
             </span>
             </a>
+
+            <div class="d-flex align-items-center justify-content-end">
+            <span class="navbar-text font-weight-bold d-flex align-items-center p-2 rounded"
+                  style="background-color: #f8f9fa; color: #333; font-size: 14px;" th:if="${@rq.login}">
+            <i class="fa fa-user-circle" aria-hidden="true" style="color: #007bff; margin-right: 5px;"></i>
+            <span>
+            환영합니다, <span class="text-primary font-weight-bold" th:text="${@rq.siteUser.getUserId()}">사용자</span>님!
+            </span>
+            </span>
+
             <div class="user_option">
-                <a href="">
+                <a sec:authorize="isAnonymous()" th:href="@{/users/login}">
               <span>
                 Login
               </span>
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/users/logout}">
+                    <span>
+                        Logout
+                    </span>
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </a>
                 <form class="form-inline">
@@ -66,6 +82,7 @@
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </button>
                 </form>
+            </div>
             </div>
         </nav>
     </div>

@@ -4,6 +4,8 @@ import closet_share.closetshare_platform.domain.Borrow;
 import closet_share.closetshare_platform.domain.InterestedProducts;
 import closet_share.closetshare_platform.domain.Item;
 import closet_share.closetshare_platform.domain.User;
+import closet_share.closetshare_platform.model.Gender;
+import closet_share.closetshare_platform.model.Role;
 import closet_share.closetshare_platform.model.UserDTO;
 import closet_share.closetshare_platform.repos.BorrowRepository;
 import closet_share.closetshare_platform.repos.InterestedProductsRepository;
@@ -11,10 +13,12 @@ import closet_share.closetshare_platform.repos.ItemRepository;
 import closet_share.closetshare_platform.repos.UserRepository;
 import closet_share.closetshare_platform.util.NotFoundException;
 import closet_share.closetshare_platform.util.ReferencedWarning;
-import java.util.List;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -23,14 +27,16 @@ public class UserService {
     private final ItemRepository itemRepository;
     private final BorrowRepository borrowRepository;
     private final InterestedProductsRepository interestedProductsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(final UserRepository userRepository, final ItemRepository itemRepository,
-            final BorrowRepository borrowRepository,
-            final InterestedProductsRepository interestedProductsRepository) {
+                       final BorrowRepository borrowRepository,
+                       final InterestedProductsRepository interestedProductsRepository, final PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.borrowRepository = borrowRepository;
         this.interestedProductsRepository = interestedProductsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDTO> findAll() {
@@ -44,6 +50,20 @@ public class UserService {
         return userRepository.findById(seqId)
                 .map(user -> mapToDTO(user, new UserDTO()))
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public User create(String userName, String userPhoneNumber, String userId, String userPassword, Role role, Gender gender) {
+        User user = new User();
+        user.setUserName(userName);
+        user.setUserPhoneNumber(userPhoneNumber);
+        user.setUserId(userId);
+        user.setUserPassword(passwordEncoder.encode(userPassword));
+        user.setRole(role);
+        user.setGender(gender);
+        user.setAddress("Not Authenticated");
+        user.setSubAddress("Not Authenticated");
+        this.userRepository.save(user);
+        return user;
     }
 
     public Long create(final UserDTO userDTO) {
@@ -119,6 +139,10 @@ public class UserService {
             return referencedWarning;
         }
         return null;
+    }
+
+    public Optional<User> findByUserId(String userId) {
+        return userRepository.findByUserId(userId);
     }
 
 }
