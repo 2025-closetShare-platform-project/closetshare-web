@@ -8,12 +8,11 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 
 @Controller
@@ -32,21 +31,40 @@ public class HashTagController {
         return "admin/hashTag/list";
     }
 
+//    @GetMapping("/add")
+//    public String add(@ModelAttribute("hashTag") final HashTagDTO hashTagDTO) {
+//        return "admin/hashTag/add";
+//    }
+
+//    @PostMapping("/add")
+//    public String add(@ModelAttribute("hashTag") @Valid final HashTagDTO hashTagDTO,
+//            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+//        if (bindingResult.hasErrors()) {
+//            return "admin/hashTag/add";
+//        }
+//        hashTagService.create(hashTagDTO);
+//        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTag.create.success"));
+//        return "redirect:/admin/hashTags";
+//    }
+
     @GetMapping("/add")
-    public String add(@ModelAttribute("hashTag") final HashTagDTO hashTagDTO) {
-        return "admin/hashTag/add";
+    public String addHastag(@ModelAttribute("hashTag") final HashTagDTO hashTagDTO,
+                            Model model) {
+        model.addAttribute("hasTags",hashTagService.findAll());
+
+
+        return "admin/hashTag/hastag-add";
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("hashTag") @Valid final HashTagDTO hashTagDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "admin/hashTag/add";
-        }
-        hashTagService.create(hashTagDTO);
+    public String add(@RequestBody @Valid List<String> tags
+           , final RedirectAttributes redirectAttributes) {
+
+        tags.forEach(tag -> System.out.println("Received tag: " + tag));
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTag.create.success"));
         return "redirect:/admin/hashTags";
     }
+
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
