@@ -2,18 +2,22 @@ package closet_share.closetshare_platform;
 
 import closet_share.closetshare_platform.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequestScope
 @RequiredArgsConstructor
-public class Rq {
+public class Rq implements UserDetails{
     private Boolean isLogin;
     private User user;
     private closet_share.closetshare_platform.domain.User siteUser;
@@ -52,5 +56,20 @@ public class Rq {
         }
 
         return user;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return user != null ? user.getPassword() : null;
+    }
+
+    @Override
+    public String getUsername() {
+        return user != null ? user.getUsername() : null;
     }
 }

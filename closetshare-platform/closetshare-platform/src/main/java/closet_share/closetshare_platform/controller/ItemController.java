@@ -1,5 +1,6 @@
 package closet_share.closetshare_platform.controller;
 
+import closet_share.closetshare_platform.Rq;
 import closet_share.closetshare_platform.domain.User;
 import closet_share.closetshare_platform.model.*;
 import closet_share.closetshare_platform.repos.UserRepository;
@@ -10,9 +11,11 @@ import closet_share.closetshare_platform.service.ItemService;
 import closet_share.closetshare_platform.util.CustomCollectors;
 import closet_share.closetshare_platform.util.ReferencedWarning;
 import closet_share.closetshare_platform.util.WebUtils;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.boot.jackson.JsonMixinModuleEntries;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +39,7 @@ public class ItemController {
     private final UserRepository userRepository;
     private final HashTagService hashTagService;
     private final HashTagItemService hashTagItemService;
+    private final Rq rq;
 
     //파일 폴더 위치
     private String uploadFolder = "/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
@@ -44,12 +48,13 @@ public class ItemController {
     public ItemController(final ItemService itemService, final UserRepository userRepository,
                           final HashTagService hashTagService,
                           final HashTagItemService hashTagItemService,
-                          final  ItemImageService itemImageService, JsonMixinModuleEntries jsonMixinModuleEntries) {
+                          final  ItemImageService itemImageService, Rq rq, JsonMixinModuleEntries jsonMixinModuleEntries) {
         this.itemService = itemService;
         this.userRepository = userRepository;
         this.itemImageService = itemImageService;
         this.hashTagItemService = hashTagItemService;
         this.hashTagService = hashTagService;
+        this.rq = rq;
         this.jsonMixinModuleEntries = jsonMixinModuleEntries;
     }
 
@@ -71,23 +76,32 @@ public class ItemController {
     @GetMapping("/add")
     public String add(@ModelAttribute("item") final ItemDTO itemDTO,
                       @ModelAttribute("hastag") final HashTagDTO hashTagDTO,
-                      Model model) {
-        model.addAttribute("hasTags",hashTagService.findAll());
-
-        return "admin/item/add";
+                      Model model,
+                      RedirectAttributes redirectAttributes) {
+        User user = rq.getSiteUser();
+        if (user == null) {
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, WebUtils.getMessage("로그인 후 이용 가능"));
+            return "redirect:/users/login";
+        }
+        else {
+            model.addAttribute("users",user);
+            model.addAttribute("hasTags",hashTagService.findAll());
+            return "member/item/add";
+        }
     }
 
 
     //MultipartFile file controller
     @Transactional
     @PostMapping("/add")
-    public String add(@ModelAttribute("item") @Valid final ItemDTO itemDTO,
+    public String add(@ModelAttribute("item") final ItemDTO itemDTO,
                       @RequestPart(value = "file", required = true) @Valid MultipartFile[] file,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
 //        if (bindingResult.hasErrors()) {
 //            return "admin/item/add";
 //        }
-
+        User user = rq.getSiteUser();
+        itemDTO.setUserId(user.getSeqId());
 //        String subCategoryName = String.valueOf(itemDTO.getSeqId());
         List<Map<String,Object>> fileUrl = itemImageService.saveFiles(file, uploadFolder);
 
@@ -106,9 +120,8 @@ public class ItemController {
         }
 
 
-
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.create.success"));
-        return "redirect:/admin/items";
+        return "redirect:/";
     }
 
     @GetMapping("/detail/{seqId}")
@@ -116,6 +129,7 @@ public class ItemController {
                          Model model) {
         model.addAttribute("item", itemService.get(seqId));
         model.addAttribute("images",itemImageService.findByitemId(seqId));
+        model.addAttribute("users",rq.getSiteUser());
 
         return "member/item/detail";
     }

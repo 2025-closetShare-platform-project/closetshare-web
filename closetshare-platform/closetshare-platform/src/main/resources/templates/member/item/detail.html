@@ -54,6 +54,15 @@
     <!-- Item Details -->
     <div class="card mt-4">
         <div class="card-body">
+            <h2 class="text-primary">session User</h2>
+            <p class="card-text fs-5" th:text="${users.getUserName()}"></p>
+            <h3 th:text="${users.getAddress()}"></h3>
+        </div>
+    </div>
+
+    <!-- Item Details -->
+    <div class="card mt-4">
+        <div class="card-body">
             <h2 class="text-primary">Item Details</h2>
             <p class="card-text fs-5" th:text="${item.title}"></p>
             <h3 th:text="${item.content}"></h3>

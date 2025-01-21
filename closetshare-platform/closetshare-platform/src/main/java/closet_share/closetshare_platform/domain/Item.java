@@ -53,7 +53,7 @@ public class Item {
     private Integer price;
 
     @Column(nullable = false)
-    private Integer viewCount;
+    private Integer viewCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id_id", nullable = false)
