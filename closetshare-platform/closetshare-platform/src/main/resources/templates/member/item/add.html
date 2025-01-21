@@ -1,34 +1,116 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<head>
-    <title>[[#{item.add.headline}]]</title>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<!-- 공통 레이아웃 -->
+<head th:replace="~{/member/fragments/head :: head}">
+    <title>Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #555;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
-<div layout:fragment="content">
-    <div class="d-flex flex-wrap mb-4">
-        <h1 class="flex-grow-1">[[#{item.add.headline}]]</h1>
-        <div>
-            <a th:href="@{/items}" class="btn btn-secondary">[[#{item.add.back}]]</a>
+<div class="hero_area">
+    <!-- header section -->
+    <header th:replace="~{/member/fragments/header :: header}"></header>
+    <!-- end header section -->
+
+    <div class="form-container">
+        <div class="d-flex flex-wrap mb-4">
+            <h1 class="flex-grow-1">[[#{item.add.headline}]]</h1>
+            <div>
+                <a th:href="@{/items}" class="btn btn-secondary">[[#{item.add.back}]]</a>
+            </div>
         </div>
+        <div th:replace="~{admin/fragments/forms::globalErrors('item')}" />
+        <form th:action="@{/items/add}" th:object="${item}" method="post" enctype="multipart/form-data">
+            <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='category', required=true, type='radio')}" />
+            <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='gender', required=true, type='radio')}" />
+            <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='title', required=true)}" />
+            <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
+            <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
+            <!-- File Upload -->
+            <div class="form-group">
+                <label for="fileInput">File Upload<span class="text-danger">*</span></label>
+                <input id="fileInput" th:field="*{file}" type="file" class="form-control" multiple required />
+            </div>
+            <button type="submit" class="btn btn-primary">[[#{item.add.headline}]]</button>
+        </form>
     </div>
-    <div th:replace="~{admin/fragments/forms::globalErrors('item')}" />
-    <form th:action="${requestUri}" method="post"  enctype="multipart/form-data" >
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='category', required=true, type='radio')}" />
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='gender', required=true, type='radio')}" />
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='title', required=true)}" />
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='viewCount', required=true, type='number')}" />
-        <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='userId', required=true, type='select')}" />
-        <label for="fileInput" class="col-md-2 col-form-label">
-            File Upload<span class="text-danger">*</span>
-        </label>
-        <div class="col-md-10">
-            <input id="fileInput" name="file" type="file" class="form-control" required multiple />
-        </div>
-        <input type="submit" th:value="#{item.add.headline}" class="btn btn-primary mt-4" />
-    </form>
+
+    <!-- footer section -->
+    <footer th:replace="~{/member/fragments/footer :: footer}"></footer>
+    <!-- end footer section -->
+
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="/js/custom.js"></script>
 </div>
 </body>
 </html>

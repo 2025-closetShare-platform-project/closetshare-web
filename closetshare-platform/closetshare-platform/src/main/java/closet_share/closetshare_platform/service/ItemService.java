@@ -90,7 +90,6 @@ public class ItemService {
         item.setTitle(itemDTO.getTitle());
         item.setContent(itemDTO.getContent());
         item.setPrice(itemDTO.getPrice());
-        item.setViewCount(itemDTO.getViewCount());
         final User userId = itemDTO.getUserId() == null ? null : userRepository.findById(itemDTO.getUserId())
                 .orElseThrow(() -> new NotFoundException("userId not found"));
         item.setUserId(userId);
