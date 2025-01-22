@@ -94,12 +94,14 @@ public class ItemController {
     //MultipartFile file controller
     @Transactional
     @PostMapping("/add")
-    public String add(@ModelAttribute("item") final ItemDTO itemDTO,
-                      @RequestPart(value = "file", required = true) @Valid MultipartFile[] file,
+    public String add(         @RequestPart("data") final ItemDTO itemDTO,                // JSON 데이터
+                               @RequestPart("tags") List<String> tags,              // 해시태그 JSON
+                      @RequestParam(value = "file", required = true) @Valid MultipartFile[] file,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
 //        if (bindingResult.hasErrors()) {
 //            return "admin/item/add";
 //        }
+//        ItemDTO itemDTO = new ItemDTO();
         User user = rq.getSiteUser();
         itemDTO.setUserId(user.getSeqId());
 //        String subCategoryName = String.valueOf(itemDTO.getSeqId());
@@ -119,6 +121,24 @@ public class ItemController {
             itemImageService.create(itemImageDTO);
         }
 
+        for (String tag : tags) {
+            Long hashTagId;
+            Long exist = hashTagService.findIdByHashName(tag);
+            if ( exist != null) {
+                hashTagId = exist;
+            }
+            else {
+                HashTagDTO hashTagDTO = new HashTagDTO();
+                hashTagDTO.setTagName(tag);
+                hashTagId = hashTagService.create(hashTagDTO);
+            }
+            HashTagItemDTO hashTagItemDTO = new HashTagItemDTO();
+            hashTagItemDTO.setItemId(itemSeqId);
+            hashTagItemDTO.setHashtagId(hashTagId);
+
+            hashTagItemService.create(hashTagItemDTO);
+        }
+
 
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.create.success"));
         return "redirect:/";
@@ -130,6 +150,9 @@ public class ItemController {
         model.addAttribute("item", itemService.get(seqId));
         model.addAttribute("images",itemImageService.findByitemId(seqId));
         model.addAttribute("users",rq.getSiteUser());
+        model.addAttribute("hashtags",hashTagItemService.findByItemId(seqId));
+        model.addAttribute("hashtag1s",hashTagItemService.findByItemId(seqId).getFirst().getTagName());
+
 
         return "member/item/detail";
     }

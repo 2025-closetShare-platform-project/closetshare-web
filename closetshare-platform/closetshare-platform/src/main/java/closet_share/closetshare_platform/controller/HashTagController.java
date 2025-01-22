@@ -1,10 +1,13 @@
 package closet_share.closetshare_platform.controller;
 
 import closet_share.closetshare_platform.model.HashTagDTO;
+import closet_share.closetshare_platform.model.HashTagItemDTO;
+import closet_share.closetshare_platform.model.ItemImageDTO;
 import closet_share.closetshare_platform.service.HashTagService;
 import closet_share.closetshare_platform.util.ReferencedWarning;
 import closet_share.closetshare_platform.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 
 @Controller
@@ -47,9 +54,12 @@ public class HashTagController {
 //        return "redirect:/admin/hashTags";
 //    }
 
+
     @GetMapping("/add")
     public String addHastag(@ModelAttribute("hashTag") final HashTagDTO hashTagDTO,
+//                            CsrfToken csrfToken,
                             Model model) {
+//        model.addAttribute("_csrf", csrfToken);
         model.addAttribute("hasTags",hashTagService.findAll());
 
 
@@ -59,6 +69,13 @@ public class HashTagController {
     @PostMapping("/add")
     public String add(@RequestBody @Valid List<String> tags
            , final RedirectAttributes redirectAttributes) {
+        for (String tag : tags) {
+        HashTagDTO hashTagDTO = new HashTagDTO();
+        hashTagDTO.setTagName(tag);
+        hashTagService.create(hashTagDTO);
+        HashTagItemDTO hashTagItemDTO = new HashTagItemDTO();
+//        hashTagItemDTO.setItemId();
+        }
 
         tags.forEach(tag -> System.out.println("Received tag: " + tag));
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("hashTag.create.success"));
