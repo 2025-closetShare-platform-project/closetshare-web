@@ -11,8 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RequestMapping(value = "/" , method = {RequestMethod.GET, RequestMethod.POST})
-@Controller
+ @Controller
 public class HomeController {
 
     private final ItemService itemService;
@@ -38,7 +37,7 @@ public class HomeController {
         return "admin/home/index";
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String index(Model model){
 
         model.addAttribute("items", itemService.findAll());

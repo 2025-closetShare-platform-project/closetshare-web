@@ -147,13 +147,11 @@ public class ItemController {
     @GetMapping("/detail/{seqId}")
     public String detail(@PathVariable(name = "seqId") final Long seqId,
                          Model model) {
+        User user = rq.getSiteUser();
         model.addAttribute("item", itemService.get(seqId));
         model.addAttribute("images",itemImageService.findByitemId(seqId));
-        model.addAttribute("users",rq.getSiteUser());
+        model.addAttribute("users",user);
         model.addAttribute("hashtags",hashTagItemService.findByItemId(seqId));
-        model.addAttribute("hashtag1s",hashTagItemService.findByItemId(seqId).getFirst().getTagName());
-
-
         return "member/item/detail";
     }
 

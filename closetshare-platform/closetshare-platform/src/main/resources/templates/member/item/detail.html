@@ -52,7 +52,7 @@
     </div>
 
     <!-- Item Details -->
-    <div class="card mt-4">
+    <div class="card mt-4" th:if="${users}!=null">
         <div class="card-body">
             <h2 class="text-primary">session User</h2>
             <p class="card-text fs-5" th:text="${users.getUserName()}"></p>
@@ -71,7 +71,7 @@
     </div>
 
     <!-- hasTags Details -->
-    <div class="card mt-4">
+    <div class="card mt-4" th:if="${!hashtags.isEmpty()}">
         <div class="card-body">
             <h2 class="text-primary">HashTags </h2>
             <p class="card-text fs-5" th:each="hashtag : ${hashtags}" th:text="${hashtag.getTagName()}"></p>
