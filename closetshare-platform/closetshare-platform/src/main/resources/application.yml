@@ -31,7 +31,8 @@ spring:
       date-time: yyyy-MM-dd'T'HH:mm:ss
       time: HH:mm:ss
   upload:
-    folder: /Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload
+    folder: C:\Users\Song\Desktop\2025-closetshare-platform\closetshare-web\closetshare-platform\upload
+    #/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload
 
 error:
   handling:

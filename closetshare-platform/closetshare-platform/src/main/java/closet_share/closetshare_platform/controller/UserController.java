@@ -12,11 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -95,23 +91,28 @@ public class UserController {
             return "member/signup/signup_form";
         }
 
-        if(!userCreateForm.getUserPassword().equals(userCreateForm.getUserPassword2())){
+        if (!userCreateForm.getUserPassword().equals(userCreateForm.getUserPassword2())) {
             bindingResult.rejectValue("userPassword2", "passwordIncorrect", "2개의 패스워드가 일치하지 않습니다.");
             return "member/signup/signup_form";
         }
 
-        try{
+        try {
             userService.create(userCreateForm.getUserName(), userCreateForm.getUserPhoneNumber(), userCreateForm.getUserId(), userCreateForm.getUserPassword(), Role.MEMBER, userCreateForm.getGender());
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "member/signup/signup_form";
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "member/signup/signup_form";
 
         }
         return "redirect:/";
+    }
+
+    @GetMapping("mypage")
+    public String myPage() {
+        return "member/mypage/mypage_form";
     }
 }

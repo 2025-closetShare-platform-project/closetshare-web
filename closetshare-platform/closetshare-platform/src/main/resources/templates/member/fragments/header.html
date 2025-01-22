@@ -46,7 +46,7 @@
                     <a class="" href="why.html"> Why Us </a>
                     <a class="" href="team.html"> Our Team</a>
                     <a class="" href="testimonial.html"> Testimonial</a>
-                    <a class="" href="contact.html"> Contact Us</a>
+                    <a class="" sec:authorize="isAuthenticated()" th:href="@{/users/mypage}"> 마이페이지</a>
                 </div>
             </div>
             <a class="navbar-brand" th:href = "@{/}">
@@ -54,7 +54,6 @@
               Closet Share
             </span>
             </a>
-
             <div class="d-flex align-items-center justify-content-end">
             <span class="navbar-text font-weight-bold d-flex align-items-center p-2 rounded"
                   style="background-color: #f8f9fa; color: #333; font-size: 14px;" th:if="${@rq.login}">

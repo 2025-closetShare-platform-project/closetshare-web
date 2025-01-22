@@ -38,7 +38,8 @@ public class ItemController {
     private final HashTagItemService hashTagItemService;
 
     //파일 폴더 위치
-    private String uploadFolder = "/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
+    private String uploadFolder = "C:\\Users\\Song\\Desktop\\2025-closetshare-platform\\closetshare-web\\closetshare-platform\\upload";
+    //"/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
 
 
     public ItemController(final ItemService itemService, final UserRepository userRepository,

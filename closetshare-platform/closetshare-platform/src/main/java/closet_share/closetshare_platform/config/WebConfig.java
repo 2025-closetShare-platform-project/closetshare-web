@@ -10,7 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
 
-    final String uploadFolder = "/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
+    final String uploadFolder = "/Users/Song/Desktop/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
+            //"/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
