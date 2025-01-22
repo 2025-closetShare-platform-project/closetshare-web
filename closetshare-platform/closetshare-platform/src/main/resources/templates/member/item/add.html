@@ -105,7 +105,7 @@
                     <input type="text" id="hashtagInput" placeholder="Add a hashtag..." autocomplete="off" />
                 </div>
             </div>
-            <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+            <button th:href="@{/}" type="button" id="submitBtn" class="btn btn-primary">Submit</button>
         </form>
     </div>
 
@@ -182,13 +182,19 @@
                 method: "POST",
                 body: formData,
             })
-                .then(response => response.ok ? response.text() : Promise.reject(response))
+                .then(response => {
+                    if (response.ok) {
+                        // POST 성공 후 리디렉션
+                        window.location.href = "/";
+                    } else {
+                        return Promise.reject(response);
+                    }
+                })
                 .then(data => console.log("Success:", data))
                 .catch(error => console.error("Error:", error));
         });
 
     });
-
 </script>
 </body>
 </html>
