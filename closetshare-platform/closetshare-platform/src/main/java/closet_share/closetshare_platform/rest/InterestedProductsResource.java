@@ -27,37 +27,37 @@ public class InterestedProductsResource {
         this.interestedProductsService = interestedProductsService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<InterestedProductsDTO>> getAllInterestedProductss() {
-        return ResponseEntity.ok(interestedProductsService.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<List<InterestedProductsDTO>> getAllInterestedProductss() {
+//        return ResponseEntity.ok(interestedProductsService.findAll());
+//    }
 
-    @GetMapping("/{seqId}")
-    public ResponseEntity<InterestedProductsDTO> getInterestedProducts(
-            @PathVariable(name = "seqId") final Long seqId) {
-        return ResponseEntity.ok(interestedProductsService.get(seqId));
-    }
+//    @GetMapping("/{seqId}")
+//    public ResponseEntity<InterestedProductsDTO> getInterestedProducts(
+//            @PathVariable(name = "seqId") final Long seqId) {
+//        return ResponseEntity.ok(interestedProductsService.get(seqId));
+//    }
 
-    @PostMapping
-    public ResponseEntity<Long> createInterestedProducts(
-            @RequestBody @Valid final InterestedProductsDTO interestedProductsDTO) {
-        final Long createdSeqId = interestedProductsService.create(interestedProductsDTO);
-        return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{seqId}")
-    public ResponseEntity<Long> updateInterestedProducts(
-            @PathVariable(name = "seqId") final Long seqId,
-            @RequestBody @Valid final InterestedProductsDTO interestedProductsDTO) {
-        interestedProductsService.update(seqId, interestedProductsDTO);
-        return ResponseEntity.ok(seqId);
-    }
-
-    @DeleteMapping("/{seqId}")
-    public ResponseEntity<Void> deleteInterestedProducts(
-            @PathVariable(name = "seqId") final Long seqId) {
-        interestedProductsService.delete(seqId);
-        return ResponseEntity.noContent().build();
-    }
+//    @PostMapping
+//    public ResponseEntity<Long> createInterestedProducts(
+//            @RequestBody @Valid final InterestedProductsDTO interestedProductsDTO) {
+//        final Long createdSeqId = interestedProductsService.create(interestedProductsDTO);
+//        return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
+//    }
+//
+//    @PutMapping("/{seqId}")
+//    public ResponseEntity<Long> updateInterestedProducts(
+//            @PathVariable(name = "seqId") final Long seqId,
+//            @RequestBody @Valid final InterestedProductsDTO interestedProductsDTO) {
+//        interestedProductsService.update(seqId, interestedProductsDTO);
+//        return ResponseEntity.ok(seqId);
+//    }
+//
+//    @DeleteMapping("/{seqId}")
+//    public ResponseEntity<Void> deleteInterestedProducts(
+//            @PathVariable(name = "seqId") final Long seqId) {
+//        interestedProductsService.delete(seqId);
+//        return ResponseEntity.noContent().build();
+//    }
 
 }

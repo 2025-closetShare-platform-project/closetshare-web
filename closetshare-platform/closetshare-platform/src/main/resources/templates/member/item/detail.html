@@ -78,14 +78,58 @@
         </div>
     </div>
 
-    <!-- Back Button -->
-    <div class="d-flex justify-content-end mt-4">
-        <a th:href="@{/}" class="btn btn-secondary">Back</a>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <!-- 작성자인 경우 -->
+        <div th:if="${isAuthor}">
+            <a th:href="@{/items/edit/{seqId}(seqId=${item.seqId})}" class="btn btn-secondary">Edit</a>
+        </div>
+
+        <!-- 작성자가 아닌 경우 -->
+        <div th:if="${!isAuthor}" class="d-flex align-items-center">
+            <!-- 비로그인 상태 -->
+            <div th:if="${users} == null" class="me-3">
+                <button class="btn btn-outline-warning btn-sm" onclick="showLoginPrompt()">⭐ Add to Favorites</button>
+            </div>
+
+            <!-- 로그인 상태 -->
+            <div th:if="${users != null}" class="me-3">
+                <button class="btn btn-outline-warning btn-sm"
+                        th:data-item-id="${item.seqId}" th:data-user-id="${users.seqId}"
+                        onclick="handleLikeButtonClick(this)">
+                    ⭐ Add to Favorites <span class="badge bg-warning like-count"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Back 버튼 -->
+        <div>
+            <a th:href="@{/}" class="btn btn-secondary">Back</a>
+        </div>
     </div>
+
 </div>
 <!-- footer section -->
 <footer th:replace="~{/member/fragments/footer :: footer}"></footer>
 <!-- end footer section -->
+    <!-- Login Prompt Modal -->
+</div>
+    <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">로그인 필요</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    좋아요를 누르려면 로그인이 필요합니다.
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/users/login}" class="btn btn-primary">로그인 하러 가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/bootstrap.js"></script>
@@ -93,19 +137,91 @@
 <script src="/js/custom.js"></script>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // 이미지 클릭 시 모달에 이미지 로드
-    document.addEventListener("DOMContentLoaded", () => {
-        const modalImage = document.getElementById("modalImage");
-        const clickableImages = document.querySelectorAll(".img-clickable");
+    // Login Prompt Modal 표시
+    function showLoginPrompt() {
+        const loginModal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
+        loginModal.show();
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => {
+    const modalImage = document.getElementById("modalImage");
+    const clickableImages = document.querySelectorAll(".img-clickable");
 
-        clickableImages.forEach(image => {
-            image.addEventListener("click", () => {
-                modalImage.src = image.getAttribute("data-bs-src");
-            });
+    // 이미지 클릭 시 모달에 이미지 로드
+    clickableImages.forEach(image => {
+        image.addEventListener("click", () => {
+            modalImage.src = image.getAttribute("data-bs-src");
         });
     });
+
+    // 좋아요 상태 확인
+    const likeButton = document.querySelector("button[data-item-id]");
+    const itemId = likeButton.getAttribute("data-item-id");
+    const userId = likeButton.getAttribute("data-user-id");
+
+    if (likeButton) {
+        fetch(`/interestedProductss/status?itemId=${itemId}&userId=${userId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch like status");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버에서 "liked" 또는 "unliked" 상태 반환
+                if (data.status === "liked") {
+                    likeButton.classList.remove("btn-outline-warning");
+                    likeButton.classList.add("btn-warning");
+                    likeButton.innerHTML = `⭐ Remove from Favorites`;
+                } else if (data.status === "unliked") {
+                    likeButton.classList.remove("btn-warning");
+                    likeButton.classList.add("btn-outline-warning");
+                    likeButton.innerHTML = `⭐ Add to Favorites`;
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+});
+
+function handleLikeButtonClick(button) {
+    const itemId = button.getAttribute("data-item-id");
+    const userId = button.getAttribute("data-user-id");
+
+    fetch(`/interestedProductss/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            "itemId": itemId,
+            "userId": userId
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => { throw new Error(error.message || "Error occurred") });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 버튼 상태 업데이트
+            if (data.status === "liked") {
+                button.classList.remove("btn-outline-warning");
+                button.classList.add("btn-warning");
+                button.innerHTML = `⭐ Remove from Favorites`;
+            } else if (data.status === "unliked") {
+                button.classList.remove("btn-warning");
+                button.classList.add("btn-outline-warning");
+                button.innerHTML = `⭐ Add to Favorites`;
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("좋아요 처리 중 오류가 발생했습니다.");
+        });
+}
 </script>
 </body>
 </html>
