@@ -141,8 +141,8 @@ public class ItemController {
         }
 
 
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.create.success"));
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item이 등록되었습니다."));
+        return "member/item/detail";
     }
 
     @GetMapping("/detail/{seqId}")
@@ -192,14 +192,21 @@ public class ItemController {
             @ModelAttribute("item") final ItemDTO itemDTO, final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes) {
         ItemDTO olditemDTO = itemService.get(seqId);
-        itemDTO.setUserId(olditemDTO.getSeqId());
-        itemDTO.setViewCount(olditemDTO.getViewCount());
-        if (bindingResult.hasErrors()) {
-            return "member/item/edit";
+        itemDTO.setUserId(olditemDTO.getUserId());
+        if (!itemDTO.getUserId().equals(rq.getSiteUser().getSeqId())) {
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, WebUtils.getMessage("잘못된 접근 입니다."));
+            return "redirect:/member/item/detail/"+seqId;
         }
-        itemService.update(seqId, itemDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.update.success"));
-        return "redirect:/items/detail/"+seqId;
+else {
+            itemDTO.setViewCount(olditemDTO.getViewCount());
+            if (bindingResult.hasErrors()) {
+                return "member/item/edit";
+            }
+            itemService.update(seqId, itemDTO);
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.update.success"));
+            return "redirect:/items/detail/" + seqId;
+        }
+
     }
 
     @PostMapping("/delete/{seqId}")
