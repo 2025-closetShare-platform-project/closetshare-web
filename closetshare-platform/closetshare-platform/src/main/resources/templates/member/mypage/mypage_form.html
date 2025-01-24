@@ -1,114 +1,69 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<!-- 공통 레이아웃 -->
-<head th:replace="~{/member/fragments/head :: head}"><title>Detail</title></head>
+<head th:replace="~{/member/fragments/head :: head}">
+  <title>My Page</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
 <body>
 <div class="hero_area">
-  <!-- header section -->
+  <!-- Header section -->
   <header th:replace="~{/member/fragments/header :: header}"></header>
-  <!-- end header section -->
+  <!-- End header section -->
 
-
-  <!-- service section -->
-  <section class="client_section layout_padding">
+  <!-- My Page section -->
+  <section class="mypage_section">
     <div class="container">
       <div class="heading_container">
-        <h2>
-          Testimonial
-        </h2>
+        <h2>마이페이지</h2>
       </div>
-      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="box">
-              <div class="img-box">
-                <img src="/images/client.jpg" alt="" />
-              </div>
-              <div class="client_detail">
-                <div class="client_name">
-                  <div class="client_info">
-                    <h4>
-                      Roocky Rom
-                    </h4>
-                    <span>
-                      Parante
-                    </span>
-                  </div>
-                  <i class="fa fa-quote-left" aria-hidden="true"></i>
-                </div>
-                <p>
-                  use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="box">
-              <div class="img-box">
-                <img src="images/client.jpg" alt="" />
-              </div>
-              <div class="client_detail">
-                <div class="client_name">
-                  <div class="client_info">
-                    <h4>
-                      Roocky Rom
-                    </h4>
-                    <span>
-                      Parante
-                    </span>
-                  </div>
-                  <i class="fa fa-quote-left" aria-hidden="true"></i>
-                </div>
-                <p>
-                  use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="box">
-              <div class="img-box">
-                <img src="images/client.jpg" alt="" />
-              </div>
-              <div class="client_detail">
-                <div class="client_name">
-                  <div class="client_info">
-                    <h4>
-                      Roocky Rom
-                    </h4>
-                    <span>
-                      Parante
-                    </span>
-                  </div>
-                  <i class="fa fa-quote-left" aria-hidden="true"></i>
-                </div>
-                <p>
-                  use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
+      <div class="user_info">
+        <h3>사용자 정보</h3>
+        <table class="info_table">
+          <tr>
+            <th>사용자 ID</th>
+            <td th:text="${@rq.siteUser.getUserId()}"></td>
+          </tr>
+          <tr>
+            <th>이름</th>
+            <td th:text="${@rq.siteUser.getUserName()}"></td>
+          </tr>
+          <tr>
+            <th>전화번호</th>
+            <td th:text="${@rq.siteUser.getUserPhoneNumber()}"></td>
+          </tr>
+          <tr>
+            <th>주소</th>
+            <td>
+              <span th:if="${@rq.siteUser.getAddress() != 'Not Authenticated'}" th:text="${@rq.siteUser.getAddress()}"></span>
+              <button th:if="${@rq.siteUser.getAddress() == 'Not Authenticated'}"
+                      type="button"
+                      class="btn btn-warning"
+                      onclick="location.href='/address-authentication'">
+                주소 인증하기
+              </button>
+            </td>
+          </tr>
+        </table>
       </div>
+          <div class="form_group">
+            <button type="submit" class="btn btn_primary">정보 수정</button>
+          </div>
     </div>
   </section>
+  <!-- End My Page section -->
 
 </div>
-<!-- end service section -->
 
-<!-- footer section -->
+<!-- Footer section -->
 <footer th:replace="~{/member/fragments/footer :: footer}"></footer>
-<!-- end footer section -->
+<!-- End footer section -->
 
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/bootstrap.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="/js/custom.js"></script>
 </body>
+
 </html>
