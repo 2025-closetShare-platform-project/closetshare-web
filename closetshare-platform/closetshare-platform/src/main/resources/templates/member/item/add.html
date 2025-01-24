@@ -94,18 +94,24 @@
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='title', required=true)}" />
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
-            <div class="form-group">
-                <label for="fileInput">File Upload<span class="text-danger">*</span></label>
-                <input id="fileInput" name="file" type="file" class="form-control" multiple required />
+            <!-- File Upload -->
+            <div class="row mb-3">
+                <label for="fileInput" class="col-md-2 col-form-label">
+                    File Upload<span class="text-danger">*</span>
+                </label>
+                <div class="col-md-10">
+                    <input id="fileInput" th:field="*{file}" type="file" class="form-control" multiple required />
+                </div>
             </div>
             <!-- Hashtag Input -->
             <div class="mb-4">
                 <label for="hashtagInput" class="form-label">Hashtags</label>
                 <div class="tags-input" id="tagsInput">
                     <input type="text" id="hashtagInput" placeholder="Add a hashtag..." autocomplete="off" />
+                    <input type="hidden" name="hashtags" id="hashtags"/>
                 </div>
             </div>
-            <button th:href="@{/}" type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+            <input type="submit" th:value="#{item.add.headline}" class="btn btn-primary mt-4" />
         </form>
     </div>
 
@@ -124,12 +130,15 @@
         const tagsInput = document.getElementById("tagsInput");
         const hashtagInput = document.getElementById("hashtagInput");
         const submitBtn = document.getElementById("submitBtn");
+        const hashtags = document.getElementById("hashtags");
         let tags = [];
 
         // Add a new tag
         function addTag(tagText) {
             if (!tags.includes(tagText)) {
                 tags.push(tagText);
+                hashtags.value = hashtags.value+tagText+"^";
+
 
                 const tag = document.createElement("span");
                 tag.classList.add("tag");
@@ -153,6 +162,7 @@
         });
 
         // Submit form
+        /**
         submitBtn.addEventListener("click", function () {
 
             const data = {
@@ -185,7 +195,8 @@
                 .then(response => {
                     if (response.ok) {
                         // POST 성공 후 리디렉션
-                        window.location.href = "/";
+                        seqId=response.body.seqid;
+                        window.location.href = "/member/detail/"+seqId;
                     } else {
                         return Promise.reject(response);
                     }
@@ -193,6 +204,7 @@
                 .then(data => console.log("Success:", data))
                 .catch(error => console.error("Error:", error));
         });
+            **/
 
     });
 </script>
