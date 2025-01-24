@@ -1,6 +1,7 @@
 package closet_share.closetshare_platform.controller;
 
 import closet_share.closetshare_platform.Rq;
+
 import closet_share.closetshare_platform.domain.ItemImage;
 import closet_share.closetshare_platform.domain.User;
 import closet_share.closetshare_platform.model.*;
@@ -26,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-
 import java.util.*;
 
 
@@ -42,7 +42,8 @@ public class ItemController {
     private final Rq rq;
 
     //파일 폴더 위치
-    private String uploadFolder = "/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
+    private String uploadFolder = "C:\\Users\\Song\\Desktop\\2025-closetshare-platform\\closetshare-web\\closetshare-platform\\upload";
+    //"/Users/gim-yeseul/Documents/2025-closetshare-platform/closetshare-web/closetshare-platform/upload";
 
 
     public ItemController(final ItemService itemService, final UserRepository userRepository,
@@ -94,6 +95,7 @@ public class ItemController {
     //MultipartFile file controller
     @Transactional
     @PostMapping("/add")
+
     public String add(        @ModelAttribute("item") final ItemDTO itemDTO,
 //            @RequestPart("data") final ItemDTO itemDTO,                // JSON 데이터
                                @RequestParam("hashtags") String hashtags,              // 해시태그 JSON
@@ -102,6 +104,7 @@ public class ItemController {
 //        if (bindingResult.hasErrors()) {
 //            return "admin/item/add";
 //        }
+
 //        ItemDTO itemDTO = new ItemDTO();
         User user = rq.getSiteUser();
         List<String> tagList = new ArrayList<>(Arrays.asList(hashtags.split("\\^")));
@@ -161,6 +164,7 @@ public class ItemController {
         }
         model.addAttribute("item",item);
         model.addAttribute("images",itemImageService.findByitemId(seqId));
+
         model.addAttribute("users",user);
         model.addAttribute("hashtags",hashTagItemService.findByItemId(seqId));
         return "member/item/detail";

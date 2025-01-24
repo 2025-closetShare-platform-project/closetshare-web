@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/member/fragments/head :: head}">
+  <title>My Page</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="hero_area">
+  <!-- Header section -->
+  <header th:replace="~{/member/fragments/header :: header}"></header>
+  <!-- End header section -->
+
+  <!-- My Page section -->
+  <section class="mypage_section">
+    <div class="container">
+      <div class="heading_container">
+        <h2>마이페이지</h2>
+      </div>
+      <div class="user_info">
+        <h3>사용자 정보 히히</h3>
+        <table class="info_table">
+          <tr>
+            <th>사용자 ID</th>
+            <td th:text="${@rq.siteUser.getUserId()}"></td>
+          </tr>
+          <tr>
+            <th>이름</th>
+            <td th:text="${@rq.siteUser.getUserName()}"></td>
+          </tr>
+          <tr>
+            <th>전화번호</th>
+            <td th:text="${@rq.siteUser.getUserPhoneNumber()}"></td>
+          </tr>
+          <tr>
+            <th>주소</th>
+            <td>
+              <span th:if="${@rq.siteUser.getAddress() != 'Not Authenticated'}" th:text="${@rq.siteUser.getAddress()}"></span>
+              <button th:if="${@rq.siteUser.getAddress() == 'Not Authenticated'}"
+                      type="button"
+                      class="btn btn-warning"
+                      onclick="location.href='/address-authentication'">
+                주소 인증하기
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+          <div class="form_group">
+            <button type="submit" class="btn btn_primary">정보 수정</button>
+          </div>
+    </div>
+  </section>
+  <!-- End My Page section -->
+
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{/member/fragments/footer :: footer}"></footer>
+<!-- End footer section -->
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="/js/custom.js"></script>
+</body>
+
+</html>

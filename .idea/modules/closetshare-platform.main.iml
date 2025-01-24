@@ -3,6 +3,11 @@
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$/../../closetshare-platform/closetshare-platform/build/generated/sources/annotationProcessor/java/main">
       <sourceFolder url="file://$MODULE_DIR$/../../closetshare-platform/closetshare-platform/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
+<!-- <<<<<<< #3_mypage
+      <sourceFolder url="file://$MODULE_DIR$/../../closetshare-platform/closetshare-platform/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
+    </content>
+  </component>
+======= -->
     </content>
   </component>
   <component name="FacetManager">
