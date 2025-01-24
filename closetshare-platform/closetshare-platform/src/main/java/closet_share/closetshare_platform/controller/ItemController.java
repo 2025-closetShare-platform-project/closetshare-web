@@ -26,9 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import java.util.*;
 
 
 @Controller
@@ -95,15 +94,17 @@ public class ItemController {
     //MultipartFile file controller
     @Transactional
     @PostMapping("/add")
-    public String add(         @RequestPart("data") final ItemDTO itemDTO,                // JSON 데이터
-                               @RequestPart("tags") List<String> tags,              // 해시태그 JSON
-                      @RequestParam(value = "file", required = true) @Valid MultipartFile[] file,
+    public String add(        @ModelAttribute("item") final ItemDTO itemDTO,
+//            @RequestPart("data") final ItemDTO itemDTO,                // JSON 데이터
+                               @RequestParam("hashtags") String hashtags,              // 해시태그 JSON
+                      @RequestPart(value = "file", required = true) @Valid MultipartFile[] file,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
 //        if (bindingResult.hasErrors()) {
 //            return "admin/item/add";
 //        }
 //        ItemDTO itemDTO = new ItemDTO();
         User user = rq.getSiteUser();
+        List<String> tagList = new ArrayList<>(Arrays.asList(hashtags.split("\\^")));
         itemDTO.setUserId(user.getSeqId());
 //        String subCategoryName = String.valueOf(itemDTO.getSeqId());
         List<Map<String,Object>> fileUrl = itemImageService.saveFiles(file, uploadFolder);
@@ -122,7 +123,7 @@ public class ItemController {
             itemImageService.create(itemImageDTO);
         }
 
-        for (String tag : tags) {
+        for (String tag : tagList) {
             Long hashTagId;
             Long exist = hashTagService.findIdByHashName(tag);
             if ( exist != null) {
@@ -142,7 +143,8 @@ public class ItemController {
 
 
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item이 등록되었습니다."));
-        return "member/item/detail";
+        //return "redirect:/member/item/detail"+itemSeqId;
+        return "redirect:/items/detail/"+itemSeqId;
     }
 
     @GetMapping("/detail/{seqId}")
