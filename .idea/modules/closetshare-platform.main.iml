@@ -3,7 +3,20 @@
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$/../../closetshare-platform/closetshare-platform/build/generated/sources/annotationProcessor/java/main">
       <sourceFolder url="file://$MODULE_DIR$/../../closetshare-platform/closetshare-platform/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
+<!-- <<<<<<< #3_mypage
       <sourceFolder url="file://$MODULE_DIR$/../../closetshare-platform/closetshare-platform/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
     </content>
+  </component>
+======= -->
+    </content>
+  </component>
+  <component name="FacetManager">
+    <facet type="jpa" name="JPA">
+      <configuration>
+        <setting name="validation-enabled" value="true" />
+        <datasource-mapping />
+        <naming-strategy-map />
+      </configuration>
+    </facet>
   </component>
 </module>

@@ -9,6 +9,8 @@ import closet_share.closetshare_platform.repos.HashTagRepository;
 import closet_share.closetshare_platform.repos.ItemRepository;
 import closet_share.closetshare_platform.util.NotFoundException;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,19 @@ public class HashTagItemService {
                 .map(hashTagItem -> mapToDTO(hashTagItem, new HashTagItemDTO()))
                 .toList();
     }
+
+
+    @Transactional
+    public List<HashTagItemDTO> findByItemId(Long itemId) {
+        final List<HashTagItem> hashTagItems = hashTagItemRepository.findHashTagItemByItemId_SeqId(itemId);
+        return hashTagItems.stream()
+                .map(hashTagItem -> mapToDTO(hashTagItem, new HashTagItemDTO()))
+                .toList();
+    }
+
+//    public List<HashTagItemDTO> findByItemId(Long itemId) {
+//        return hashTagItemRepository.findHashTagItemDTOByItemId_SeqId(itemId);
+//    }
 
     public HashTagItemDTO get(final Long seqId) {
         return hashTagItemRepository.findById(seqId)
@@ -62,6 +77,7 @@ public class HashTagItemService {
         hashTagItemDTO.setSeqId(hashTagItem.getSeqId());
         hashTagItemDTO.setItemId(hashTagItem.getItemId() == null ? null : hashTagItem.getItemId().getSeqId());
         hashTagItemDTO.setHashtagId(hashTagItem.getHashtagId() == null ? null : hashTagItem.getHashtagId().getSeqId());
+        hashTagItemDTO.setTagName(hashTagItem.getHashtagId().getTagName());
         return hashTagItemDTO;
     }
 

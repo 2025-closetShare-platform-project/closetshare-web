@@ -1,6 +1,8 @@
 package closet_share.closetshare_platform.controller;
 
 import closet_share.closetshare_platform.Rq;
+
+import closet_share.closetshare_platform.domain.ItemImage;
 import closet_share.closetshare_platform.domain.User;
 import closet_share.closetshare_platform.model.*;
 import closet_share.closetshare_platform.repos.UserRepository;
@@ -25,9 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @Controller
@@ -95,13 +95,19 @@ public class ItemController {
     //MultipartFile file controller
     @Transactional
     @PostMapping("/add")
-    public String add(@ModelAttribute("item") final ItemDTO itemDTO,
+
+    public String add(        @ModelAttribute("item") final ItemDTO itemDTO,
+//            @RequestPart("data") final ItemDTO itemDTO,                // JSON 데이터
+                               @RequestParam("hashtags") String hashtags,              // 해시태그 JSON
                       @RequestPart(value = "file", required = true) @Valid MultipartFile[] file,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
 //        if (bindingResult.hasErrors()) {
 //            return "admin/item/add";
 //        }
+
+//        ItemDTO itemDTO = new ItemDTO();
         User user = rq.getSiteUser();
+        List<String> tagList = new ArrayList<>(Arrays.asList(hashtags.split("\\^")));
         itemDTO.setUserId(user.getSeqId());
 //        String subCategoryName = String.valueOf(itemDTO.getSeqId());
         List<Map<String,Object>> fileUrl = itemImageService.saveFiles(file, uploadFolder);
@@ -120,38 +126,93 @@ public class ItemController {
             itemImageService.create(itemImageDTO);
         }
 
+        for (String tag : tagList) {
+            Long hashTagId;
+            Long exist = hashTagService.findIdByHashName(tag);
+            if ( exist != null) {
+                hashTagId = exist;
+            }
+            else {
+                HashTagDTO hashTagDTO = new HashTagDTO();
+                hashTagDTO.setTagName(tag);
+                hashTagId = hashTagService.create(hashTagDTO);
+            }
+            HashTagItemDTO hashTagItemDTO = new HashTagItemDTO();
+            hashTagItemDTO.setItemId(itemSeqId);
+            hashTagItemDTO.setHashtagId(hashTagId);
 
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.create.success"));
-        return "redirect:/";
+            hashTagItemService.create(hashTagItemDTO);
+        }
+
+
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item이 등록되었습니다."));
+        //return "redirect:/member/item/detail"+itemSeqId;
+        return "redirect:/items/detail/"+itemSeqId;
     }
 
     @GetMapping("/detail/{seqId}")
     public String detail(@PathVariable(name = "seqId") final Long seqId,
                          Model model) {
-        model.addAttribute("item", itemService.get(seqId));
+        User user = rq.getSiteUser();
+        ItemDTO item  = itemService.get(seqId);
+        if (user != null) {
+            boolean isAuthor =  item.getUserId().equals(user.getSeqId());
+            model.addAttribute("isAuthor",isAuthor);
+        }
+        else {
+            model.addAttribute("isAuthor",false);
+        }
+        model.addAttribute("item",item);
         model.addAttribute("images",itemImageService.findByitemId(seqId));
-        model.addAttribute("users",rq.getSiteUser());
 
+        model.addAttribute("users",user);
+        model.addAttribute("hashtags",hashTagItemService.findByItemId(seqId));
         return "member/item/detail";
     }
 
 
     @GetMapping("/edit/{seqId}")
-    public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
-        model.addAttribute("item", itemService.get(seqId));
-        return "admin/item/edit";
+    public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model,
+                       RedirectAttributes redirectAttributes) {
+        ItemDTO itemDTO = itemService.get(seqId);
+
+        Long AuthorId = itemDTO.getUserId();
+        User sessionuser = rq.getSiteUser();
+
+        if (!sessionuser.getSeqId().equals(AuthorId)) {
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, WebUtils.getMessage("접근 권한이 없습니다."));
+            return "redirect:/member/item/detail/"+seqId;
+        }
+        else {
+            List<ItemImageDTO> itemImageDTOS = itemImageService.findByitemId(seqId);
+            model.addAttribute("item", itemService.get(seqId));
+            model.addAttribute("images",itemImageDTOS);
+            model.addAttribute("hashtags",hashTagItemService.findByItemId(seqId));
+            return "member/item/edit";
+        }
     }
 
+    @Transactional
     @PostMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId,
-            @ModelAttribute("item") @Valid final ItemDTO itemDTO, final BindingResult bindingResult,
+            @ModelAttribute("item") final ItemDTO itemDTO, final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "admin/item/edit";
+        ItemDTO olditemDTO = itemService.get(seqId);
+        itemDTO.setUserId(olditemDTO.getUserId());
+        if (!itemDTO.getUserId().equals(rq.getSiteUser().getSeqId())) {
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, WebUtils.getMessage("잘못된 접근 입니다."));
+            return "redirect:/member/item/detail/"+seqId;
         }
-        itemService.update(seqId, itemDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.update.success"));
-        return "redirect:/admin/items";
+else {
+            itemDTO.setViewCount(olditemDTO.getViewCount());
+            if (bindingResult.hasErrors()) {
+                return "member/item/edit";
+            }
+            itemService.update(seqId, itemDTO);
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("item.update.success"));
+            return "redirect:/items/detail/" + seqId;
+        }
+
     }
 
     @PostMapping("/delete/{seqId}")

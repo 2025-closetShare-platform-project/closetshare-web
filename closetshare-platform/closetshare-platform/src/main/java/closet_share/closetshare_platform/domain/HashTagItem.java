@@ -31,11 +31,11 @@ public class HashTagItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seqId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id_id", nullable = false)
     private Item itemId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hashtag_id_id", nullable = false)
     private HashTag hashtagId;
 

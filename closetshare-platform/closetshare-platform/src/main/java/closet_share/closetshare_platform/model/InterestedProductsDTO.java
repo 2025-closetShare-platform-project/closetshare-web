@@ -5,21 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 public class InterestedProductsDTO {
 
-    private Long seqId;
-
     @NotNull
     private Long userId;
 
     @NotNull
     private Long itemId;
-
-    public Long getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Long seqId) {
-        this.seqId = seqId;
-    }
 
     public Long getUserId() {
         return userId;

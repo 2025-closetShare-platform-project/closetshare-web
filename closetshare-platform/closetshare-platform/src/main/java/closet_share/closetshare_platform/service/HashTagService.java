@@ -31,6 +31,17 @@ public class HashTagService {
                 .toList();
     }
 
+//    public Boolean findHashName(final String hashname) {
+//        return hashTagRepository.existsHashTagByTagName(hashname);
+//    }
+
+        public Long findIdByHashName(final String hashname) {
+        return hashTagRepository.findIdByTagName(hashname);
+    }
+
+
+
+
     public HashTagDTO get(final Long seqId) {
         return hashTagRepository.findById(seqId)
                 .map(hashTag -> mapToDTO(hashTag, new HashTagDTO()))

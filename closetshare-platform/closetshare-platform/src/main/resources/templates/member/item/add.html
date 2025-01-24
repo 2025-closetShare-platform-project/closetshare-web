@@ -88,18 +88,31 @@
             </div>
         </div>
         <div th:replace="~{admin/fragments/forms::globalErrors('item')}" />
-        <form th:action="@{/items/add}" th:object="${item}" method="post" enctype="multipart/form-data">
+        <form id="itemForm" th:action="@{/items/add}" th:object="${item}" method="post" enctype="multipart/form-data">
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='category', required=true, type='radio')}" />
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='gender', required=true, type='radio')}" />
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='title', required=true)}" />
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='content', required=true, type='textarea')}" />
             <div th:replace="~{admin/fragments/forms::inputRow(object='item', field='price', required=true, type='number')}" />
             <!-- File Upload -->
-            <div class="form-group">
-                <label for="fileInput">File Upload<span class="text-danger">*</span></label>
-                <input id="fileInput" th:field="*{file}" type="file" class="form-control" multiple required />
+
+            <div class="row mb-3">
+                <label for="fileInput" class="col-md-2 col-form-label">
+                    File Upload<span class="text-danger">*</span>
+                </label>
+                <div class="col-md-10">
+                    <input id="fileInput" th:field="*{file}" type="file" class="form-control" multiple required />
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">[[#{item.add.headline}]]</button>
+            <!-- Hashtag Input -->
+            <div class="mb-4">
+                <label for="hashtagInput" class="form-label">Hashtags</label>
+                <div class="tags-input" id="tagsInput">
+                    <input type="text" id="hashtagInput" placeholder="Add a hashtag..." autocomplete="off" />
+                    <input type="hidden" name="hashtags" id="hashtags"/>
+                </div>
+            </div>
+            <input type="submit" th:value="#{item.add.headline}" class="btn btn-primary mt-4" />
         </form>
     </div>
 
@@ -112,5 +125,89 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="/js/custom.js"></script>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("itemForm");
+        const tagsInput = document.getElementById("tagsInput");
+        const hashtagInput = document.getElementById("hashtagInput");
+        const submitBtn = document.getElementById("submitBtn");
+        const hashtags = document.getElementById("hashtags");
+        let tags = [];
+
+        // Add a new tag
+        function addTag(tagText) {
+            if (!tags.includes(tagText)) {
+                tags.push(tagText);
+                hashtags.value = hashtags.value+tagText+"^";
+
+
+                const tag = document.createElement("span");
+                tag.classList.add("tag");
+                tag.innerHTML = `${tagText} <span class="remove-tag">&times;</span>`;
+                tagsInput.appendChild(tag);
+
+                tag.querySelector(".remove-tag").addEventListener("click", () => {
+                    tags = tags.filter(t => t !== tagText);
+                    tagsInput.removeChild(tag);
+                });
+            }
+            hashtagInput.value = "";
+        }
+
+        // Add tag on Enter or Space
+        hashtagInput.addEventListener("keypress", function (e) {
+            if ((e.key === " " || e.key === "Enter") && hashtagInput.value.trim() !== "") {
+                e.preventDefault();
+                addTag(hashtagInput.value.trim());
+            }
+        });
+
+        // Submit form
+        /**
+        submitBtn.addEventListener("click", function () {
+
+            const data = {
+                category: form.querySelector('[name="category"]:checked').value,
+                gender: form.querySelector('[name="gender"]:checked').value,
+                title: form.querySelector('[name="title"]').value,
+                content: form.querySelector('[name="content"]').value,
+                price: form.querySelector('[name="price"]').value,
+            };
+
+            const formData = new FormData();
+            // 파일 추가
+            Array.from(fileInput.files).forEach(file => {
+                formData.append("file", file);
+            });
+
+            // JSON 데이터 추가
+            formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+            formData.append("tags", new Blob([JSON.stringify(tags)], { type: "application/json" }));
+
+            console.log("FormData entries:");
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            fetch("/items/add", {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // POST 성공 후 리디렉션
+                        seqId=response.body.seqid;
+                        window.location.href = "/member/detail/"+seqId;
+                    } else {
+                        return Promise.reject(response);
+                    }
+                })
+                .then(data => console.log("Success:", data))
+                .catch(error => console.error("Error:", error));
+        });
+            **/
+
+    });
+</script>
 </body>
 </html>
